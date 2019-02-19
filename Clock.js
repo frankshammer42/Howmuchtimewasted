@@ -1,4 +1,5 @@
 //Holder to scale up the level
+//TODO: Create Scalable Arms Container
 class Clock{
     constructor(center, second_arm_length, arm_length_diff){
         let second_arm_color = createVector(random(255), random(255), random(255));
@@ -40,10 +41,10 @@ class Clock{
         stroke(150, 100, 255);
         fill(150, 100, 255, 50);
         if (first_angle - second_angle < 180 && first_angle - second_angle > 0){
-            arc(0, 0, 2*this.distance_threshold, 2*this.distance_threshold, second_angle, first_angle);
+            arc(0, 0, 2*this.distance_threshold, 2*this.distance_threshold, second_angle+1.6, first_angle-1.6);
         }
         else{
-            arc(0, 0, 2*this.distance_threshold, 2*this.distance_threshold, first_angle, second_angle);
+            arc(0, 0, 2*this.distance_threshold, 2*this.distance_threshold, first_angle+1.6, second_angle-1.6);
         }
         pop();
     }
@@ -64,6 +65,7 @@ class Clock{
         return angle
     }
 
+    //Return Boolean
     betweenArms(pos, type_0, type_1){
         let first_angle;
         let second_angle;
@@ -106,6 +108,27 @@ class Clock{
         }
     }
 
+    //Return Capture Report 1: Captured? 2: In between which two arms
+    checkCaptureStatus(pos){
+        let report = {};
+        report['pair_info'] = [];
+        for (let i=0; i<3; i++){
+            for (let j=i+1; j<3; j++){
+                let first_angle = this.getAngleByType(i);
+                if (this.betweenArms(pos, i, j)){
+                    report['captured'] = true;
+                    let second_angle = this.getAngleByType(j);
+                    let angle_diff = Math.abs(second_angle-first_angle);
+                    if (angle_diff > 180){
+                        angle_diff = 360 - angle_diff;
+                    }
+                    let result = [i, j, angle_diff];
+                    report['pair_info'].push(result) ;
+                }
+            }
+        }
+        return report;
+    }
 
 
 }
