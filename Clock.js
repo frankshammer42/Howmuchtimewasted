@@ -1,7 +1,7 @@
 //Holder to scale up the level
 //TODO: Create Scalable Arms Container
 class Clock{
-    constructor(center, second_arm_length, arm_length_diff){
+    constructor(center, second_arm_length, arm_length_diff, angle_offset){
         let second_arm_color = createVector(random(255), random(255), random(255));
         let minute_arm_color = createVector(random(255), random(255), random(255));
         let hour_arm_color = createVector(random(255), random(255), random(255));
@@ -10,12 +10,13 @@ class Clock{
         this.minute_arm = new ClockArm(1, second_arm_length-arm_length_diff, minute_arm_color);
         this.hour_arm = new ClockArm(2, second_arm_length-2*arm_length_diff, hour_arm_color);
         this.distance_threshold = this.hour_arm.arm_length;
+        this.angle_offset = angle_offset;
     }
 
     draw(){
         push();
         translate(this.center.x, this.center.y);
-        rotate(-90);
+        rotate(this.angle_offset);
         this.second_arm.draw();
         this.minute_arm.draw();
         this.hour_arm.draw();
@@ -37,7 +38,7 @@ class Clock{
         }
         push();
         translate(this.center.x, this.center.y);
-        rotate(-90);
+        rotate(this.angle_offset);
         stroke(150, 100, 255);
         fill(150, 100, 255, 50);
         if (first_angle - second_angle < 180 && first_angle - second_angle > 0){
@@ -81,7 +82,7 @@ class Clock{
         let center = this.center;
         let distance_vector = p5.Vector.sub(pos, this.center);
         let distance = distance_vector.mag();
-        let pos_angle = p5.Vector.sub(pos, this.center).heading() + 90;
+        let pos_angle = p5.Vector.sub(pos, this.center).heading() - this.angle_offset;
         if (pos_angle < 0){
             pos_angle = 360 + pos_angle;
         }

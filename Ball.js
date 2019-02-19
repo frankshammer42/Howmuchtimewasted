@@ -18,7 +18,7 @@ class Ball {
         this.dir_vec = null;
         this.charged_speed = 0.2; //User defines charge
         this.max_charged_speed = 20; //The max user can charge;
-        this.clock_boosted_diff = 20; //The max user can charge diff for arrow
+        this.clock_boosted_diff = 40; //The max user can charge diff for arrow
         this.clock_boosted_rate_diff = 1;
         //circular_motion
         this.clock_center = null;
@@ -47,6 +47,7 @@ class Ball {
                 this.current_circular_motion_angle += this.circular_motion_speed;
                 this.position.x = this.clock_center.x + this.current_circle_radius * cos(this.current_circular_motion_angle);
                 this.position.y = this.clock_center.y + this.current_circle_radius * sin(this.current_circular_motion_angle);
+                this.drag = 0.99;
             }
             if (keyIsPressed && key == ' ') {
                 if (this.captured_by_clock){
@@ -62,6 +63,14 @@ class Ball {
             }
             this.createDirVec();
         }
+        // else{
+        //     if (this.captured_by_clock){
+        //         this.drag = 0.01;
+        //     }
+        //     else{
+        //         this.velocity.add(createVector(-1, 0));
+        //     }
+        // }
         if (Math.abs(this.velocity.x) <= 0.5 && Math.abs(this.velocity.y) <= 0.5){
             this.velocity.x = 0;
             this.velocity.y = 0;
